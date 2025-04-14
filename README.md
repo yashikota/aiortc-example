@@ -2,6 +2,8 @@
 
 This is a WebRTC example application that demonstrates real-time communication between a web browser and a Python server using [aiortc](https://github.com/aiortc/aiortc). The application supports video/audio streaming, data channels, and various codec options.
 
+https://github.com/user-attachments/assets/e8beb7ad-8cee-4602-b477-290bc7820cef
+
 ## Prerequisites
 
 - uv
