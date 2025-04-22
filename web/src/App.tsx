@@ -1,5 +1,5 @@
 // Ref: https://github.com/aiortc/aiortc/tree/main/examples/server
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import "./App.css"
 
 // Add type definition for NodeJS.Timeout
@@ -32,12 +32,32 @@ function App() {
   const [videoCodec, setVideoCodec] = useState<string>("default")
 
   // refs
+  const currentStreamRef = useRef<MediaStream | null>(null)
+  const [availableCameras, setAvailableCameras] = useState<MediaDeviceInfo[]>([])
+  const [selectedCameraId, setSelectedCameraId] = useState<string | undefined>(undefined)
   const videoRef = useRef<HTMLVideoElement>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
   const pcRef = useRef<RTCPeerConnection | null>(null)
   const dcRef = useRef<RTCDataChannel | null>(null)
   const dcIntervalRef = useRef<number | null>(null)
   const timeStartRef = useRef<number | null>(null)
+
+  // Get available camera devices on mount
+  useEffect(() => {
+    const getDevices = async () => {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices()
+        const videoDevices = devices.filter(device => device.kind === 'videoinput')
+        setAvailableCameras(videoDevices)
+        if (videoDevices.length > 0 && !selectedCameraId) {
+          setSelectedCameraId(videoDevices[0].deviceId) // Select the first camera by default
+        }
+      } catch (err) {
+        console.error("Error enumerating devices:", err)
+      }
+    }
+    getDevices()
+  }, [selectedCameraId]) // Re-run if selectedCameraId changes (though not strictly necessary here)
 
   const currentStamp = () => {
     if (timeStartRef.current === null) {
@@ -177,6 +197,31 @@ function App() {
     await pcRef.current.setRemoteDescription(answer)
   }
 
+  const switchCamera = async (deviceId: string) => {
+    setSelectedCameraId(deviceId)
+
+    if (!pcRef.current || !currentStreamRef.current) return
+
+    // Stop existing video track
+    currentStreamRef.current.getVideoTracks().forEach(track => track.stop())
+
+    try {
+      const newStream = await navigator.mediaDevices.getUserMedia({
+        audio: useAudio, // Keep current audio setting
+        video: { deviceId: { exact: deviceId } }
+      })
+      currentStreamRef.current = newStream // Update the ref with the new stream
+      const newVideoTrack = newStream.getVideoTracks()[0]
+
+      const sender = pcRef.current.getSenders().find(s => s.track?.kind === 'video')
+      if (sender && newVideoTrack) {
+        await sender.replaceTrack(newVideoTrack)
+      }
+    } catch (err) {
+      console.error("Error switching camera:", err)
+    }
+  }
+
   const start = async () => {
     pcRef.current = createPeerConnection()
 
@@ -212,10 +257,13 @@ function App() {
 
     const constraints: MediaStreamConstraints = {
       audio: useAudio,
-      video: useVideo ? {
-        width: videoResolution ? parseInt(videoResolution.split("x")[0]) : undefined,
-        height: videoResolution ? parseInt(videoResolution.split("x")[1]) : undefined
-      } : false
+      video: useVideo
+        ? {
+            deviceId: selectedCameraId ? { exact: selectedCameraId } : undefined,
+            width: videoResolution ? parseInt(videoResolution.split("x")[0]) : undefined,
+            height: videoResolution ? parseInt(videoResolution.split("x")[1]) : undefined
+          }
+        : false
     }
 
     if (constraints.audio || constraints.video) {
@@ -224,6 +272,7 @@ function App() {
         stream.getTracks().forEach(track => {
           pcRef.current?.addTrack(track, stream)
         })
+        currentStreamRef.current = stream // Store the stream
       } catch (err) {
         console.error("Could not acquire media:", err)
         return
@@ -240,6 +289,11 @@ function App() {
 
     if (dcIntervalRef.current) {
       clearInterval(dcIntervalRef.current)
+    }
+
+    // Stop media tracks from the stored stream
+    if (currentStreamRef.current) {
+      currentStreamRef.current.getTracks().forEach(track => track.stop())
     }
 
     if (pcRef.current) {
@@ -350,6 +404,23 @@ function App() {
             <option value="H264/90000">H264</option>
           </select>
         </div>
+
+         {/* Camera Selection Dropdown */}
+         {useVideo && availableCameras.length > 0 && (
+           <div className="flex items-center space-x-4">
+             <label htmlFor="camera-select" className="mr-2">Select Camera:</label>
+             <select
+               id="camera-select"
+               value={selectedCameraId}
+               onChange={(e) => switchCamera(e.target.value)}
+               className="form-select"
+             >
+               {availableCameras.map(device => (
+                 <option key={device.deviceId} value={device.deviceId}>{device.label || `Camera ${device.deviceId.substring(0, 6)}`}</option>
+               ))}
+             </select>
+           </div>
+         )}
 
         <div className="flex items-center space-x-4">
           <label className="flex items-center space-x-2">
