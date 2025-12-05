@@ -4,6 +4,12 @@ This is a WebRTC example application that demonstrates real-time communication b
 
 https://github.com/user-attachments/assets/e8beb7ad-8cee-4602-b477-290bc7820cef
 
+## Docker
+
+```sh
+docker compose up --build -d
+```
+
 ## Prerequisites
 
 - uv
