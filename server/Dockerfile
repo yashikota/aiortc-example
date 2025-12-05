@@ -1,5 +1,9 @@
 FROM nvidia/cuda:12.4.0-runtime-ubuntu22.04
 
+# Set timezone non-interactively
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Tokyo
+
 # Install Python 3.12 and system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     software-properties-common \
