@@ -10,6 +10,13 @@ https://github.com/user-attachments/assets/e8beb7ad-8cee-4602-b477-290bc7820cef
 docker compose up --build -d
 ```
 
+## Mise
+
+```sh
+curl https://mise.run | sh
+echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
+```
+
 ## Prerequisites
 
 - uv
