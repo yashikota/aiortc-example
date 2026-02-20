@@ -1,15 +1,15 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import mkcert from 'vite-plugin-mkcert'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
-  // server: {
-  //   https: true,
-  //   watch: {
-  //     usePolling: true,
-  //     interval: 100
-  //   }
-  // }
+  plugins: [react(), tailwindcss(), mkcert()],
+  server: {
+    watch: {
+      usePolling: true,
+      interval: 100
+    }
+  }
 })
