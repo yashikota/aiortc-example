@@ -54,7 +54,7 @@ echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
     uv run src/server.py
     ```
 
-    Server Started at <http://localhost:8000>
+    Server Started at <http://localhost:8787>
 
 2. In a separate terminal, start the web application
 
@@ -63,7 +63,7 @@ echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
     pnpm dev
     ```
 
-3. Open your browser and navigate to <http://localhost:5173>
+3. Open your browser and navigate to <https://localhost:8686>
 
 ## Configuration Options
 

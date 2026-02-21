@@ -12,6 +12,14 @@ declare global {
 }
 
 function App() {
+  const signalingUrlFromEnv = import.meta.env.VITE_SIGNALING_URL
+  const signalingUrl = (
+    window.location.protocol === "https:" &&
+    signalingUrlFromEnv?.startsWith("http://")
+  )
+    ? "/offer"
+    : (signalingUrlFromEnv ?? "/offer")
+
   // State management
   const [iceConnectionState, setIceConnectionState] = useState<string>("")
   const [iceGatheringState, setIceGatheringState] = useState<string>("")
@@ -180,7 +188,7 @@ function App() {
 
     setOfferSdp(offerSdp)
 
-    const response = await fetch("http://localhost:8080/offer", {
+    const response = await fetch(signalingUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
