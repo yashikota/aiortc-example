@@ -1,1 +1,209 @@
 @import "tailwindcss";
+
+:root {
+  color: #0f172a;
+  background: #f3f4f6;
+  font-family: "Segoe UI", "Noto Sans JP", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+  padding: 16px;
+}
+
+.page-bg {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 20%, #bae6fd 0%, transparent 34%),
+    radial-gradient(circle at 85% 10%, #fde68a 0%, transparent 30%),
+    linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
+  z-index: -1;
+}
+
+.app-grid {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #dbe1ea;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(3px);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 1.2rem;
+  letter-spacing: 0.01em;
+  margin-bottom: 6px;
+}
+
+h2 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #334155;
+  margin-bottom: 12px;
+}
+
+.button-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.current-settings {
+  background: #f8fafc;
+  border: 1px solid #dbe1ea;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: grid;
+  gap: 4px;
+  font-size: 0.9rem;
+}
+
+.btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 9px 14px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #0369a1, #0ea5e9);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #b91c1c, #ef4444);
+}
+
+.btn-ghost {
+  color: #0f172a;
+  background: #e2e8f0;
+}
+
+.option-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.check-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.field-label {
+  font-weight: 700;
+  color: #334155;
+  margin-top: 4px;
+}
+
+.camera-controls {
+  display: grid;
+  gap: 8px;
+}
+
+select,
+input[type="checkbox"] {
+  accent-color: #0369a1;
+}
+
+select {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  padding: 8px 10px;
+  background: #fff;
+  color: #0f172a;
+}
+
+.media-video {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  min-height: 280px;
+  aspect-ratio: 16 / 9;
+  background: #0f172a;
+}
+
+.status-grid {
+  margin-top: 10px;
+  display: grid;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+.error-text {
+  margin-bottom: 10px;
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 12px;
+  padding: 10px;
+  overflow: auto;
+  max-height: 240px;
+  font-size: 0.8rem;
+}
+
+.sdp-toggle summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.sdp-toggle[open] summary {
+  margin-bottom: 10px;
+}
+
+@media (min-width: 960px) {
+  .media-video {
+    min-height: 420px;
+  }
+}
