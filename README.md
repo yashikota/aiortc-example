@@ -31,6 +31,8 @@ echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
     cd aiortc-example
     ```
 
+    if use Mise: `mise install`
+
 2. Install Python dependencies
 
     ```bash
